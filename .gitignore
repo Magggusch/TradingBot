@@ -1,2 +1,3 @@
-./credentials
-./src/Authentication.py
+credentials
+src/Authentication.py
+src/__pycache__
