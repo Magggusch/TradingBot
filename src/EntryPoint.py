@@ -9,4 +9,4 @@ while(True):
     time_after = time.time()
     
     duration_in_sec = time_after - time_before
-    time.sleep(time_to_process_in_sec - time_after)
+    time.sleep(time_to_process_in_sec - duration_in_sec)
