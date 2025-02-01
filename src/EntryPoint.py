@@ -1,7 +1,7 @@
 import time
 import Main
 
-time_to_process_in_sec = 1 * 60
+time_to_process_in_sec = 5 * 60
 
 while(True):
     time_before = time.time()
