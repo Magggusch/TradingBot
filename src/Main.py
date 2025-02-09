@@ -17,6 +17,8 @@ def mainFunction():
         # calculate RSI values(at least two and save them)
         RSI.updateRSIValues(values, symbol)
         rsi_values = RSI.getRSIValue(symbol)
+        # decide if an action is needed(buy, sell, hold) and save all active orders of the symbol
+        
 
 # init()
 # mainFunction()
