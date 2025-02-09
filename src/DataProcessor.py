@@ -30,6 +30,7 @@ class BarDataPoint:
 
 
 symbol_data_dictionary = {}
+max_length = 255
 
 def initList(symbol):
     '''
@@ -41,7 +42,7 @@ def initList(symbol):
     # old data in list
     begin_date = datetime.now(timezone.utc) - timedelta(days=30)
     begin_date = begin_date.isoformat().replace("+00:00", "Z")
-    historical_data = APIInterface.getHistoricalData(symbol, '4H', limit=15, start_date=begin_date, sort="desc")
+    historical_data = APIInterface.getHistoricalData(symbol, '4H', limit=100, start_date=begin_date, sort="desc")
     
     for data_point in historical_data['bars'][symbol]:
         data = BarDataPoint(datetime.fromisoformat(data_point['t'].replace("Z", "+00:00")), float(data_point['l']), float(data_point['h']), float(data_point['o']), float(data_point['c']), int(data_point['v']))
@@ -52,7 +53,7 @@ def initList(symbol):
     begin_date = begin_date.isoformat().replace("+00:00", "Z")
     actual_data = APIInterface.getHistoricalData(symbol, '5Min', limit=1000, start_date=begin_date, sort="asc")
 
-    if len(actual_data['bars'][symbol]) > 0:
+    if symbol in actual_data['bars']:
         # add a new point to the list(with the data of the last one)
         new_entry = actual_data['bars'][symbol][0]
         point = BarDataPoint(datetime.fromisoformat(new_entry['t'].replace("Z", "+00:00")), float(new_entry['l']), float(new_entry['h']), float(new_entry['o']), float(new_entry['c']), int(new_entry['v']))
@@ -87,7 +88,8 @@ def actualyzeList(symbol):
         if delta_time > timedelta(hours=4):
             new_entry = actual_data['bars'][symbol][0]
             point = BarDataPoint(datetime.fromisoformat(new_entry['t'].replace("Z", "+00:00")), float(new_entry['l']), float(new_entry['h']), float(new_entry['o']), float(new_entry['c']), int(new_entry['v']))
-            four_hour_bar_list.pop(0)
+            if len(four_hour_bar_list) > max_length:
+                four_hour_bar_list.pop(0)
             four_hour_bar_list.append(point)
         else:
             data_point = actual_data['bars'][symbol][0]
